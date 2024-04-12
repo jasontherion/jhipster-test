@@ -5,8 +5,8 @@ ARG VARIANT="17"
 FROM mcr.microsoft.com/vscode/devcontainers/java:0-${VARIANT}
 
 # [Option] Install Maven
-ARG INSTALL_MAVEN="false"
-ARG MAVEN_VERSION=""
+ARG INSTALL_MAVEN="true"
+ARG MAVEN_VERSION="3.8.6"
 # [Option] Install Gradle
 ARG INSTALL_GRADLE="false"
 ARG GRADLE_VERSION=""
@@ -16,6 +16,17 @@ RUN if [ "${INSTALL_MAVEN}" = "true" ]; then su vscode -c "umask 0002 && . /usr/
 # [Choice] Node.js version: none, lts/*, 16, 14, 12, 10
 ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
+
+# Install JHipster globally
+# RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g generator-jhipster" 2>&1
+
+# Set up automatic project generation command
+# RUN echo 'jhipster --blueprints kotlin --skip-checks --skip-git --skip-install --default' > /usr/local/bin/generate-jhipster-app.sh \
+    # && chmod +x /usr/local/bin/generate-jhipster-app.sh
+
+# Run the generation script on container start
+# CMD ["/usr/local/bin/generate-jhipster-app.sh"]
+
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
